@@ -16,6 +16,7 @@ public class StandaloneLevelEditor : EditorWindow
 
     private Collider collider;
     private GameObject terrain;
+    private GameObject Level;
 
     private List<GameObject> GoodCollectibles;
     private List<GameObject> BadCollectibles;
@@ -47,8 +48,6 @@ public class StandaloneLevelEditor : EditorWindow
 
         GUILayout.BeginHorizontal();
 
-        GUILayout.BeginVertical();
-
         content.text = "Generate Terrain";
         content.tooltip = "Generates a new terrain from the prefab. If terrain exists, it destroys it.";
         if (GUILayout.Button(content))
@@ -63,13 +62,47 @@ public class StandaloneLevelEditor : EditorWindow
             ResizeTerrain();
         }
 
-        GUILayout.EndVertical();
-
         content.text = "Spawn Collectibles";
         content.tooltip = "Spawns collectibles in an already generated terrain. If there are previously spanwed collectibles, it clears the level first.";
         if (GUILayout.Button(content))
         {
             SpawnCollectibles();
+        }
+
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+
+        content.text = "Save Configuration";
+        content.tooltip = "Save level configuration in a .json file";
+        if (GUILayout.Button(content))
+        {
+            SaveConfig();
+        }
+
+        content.text = "Load Configuration";
+        content.tooltip = "Load level configuration from a .json file";
+        if (GUILayout.Button(content))
+        {
+            LoadConfig();
+        }
+
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal();
+
+        content.text = "Save Level";
+        content.tooltip = "Save entire level as a prefab";
+        if (GUILayout.Button(content))
+        {
+            SaveLevel();
+        }
+
+        content.text = "Load Level";
+        content.tooltip = "Load entire level from prefab";
+        if (GUILayout.Button(content))
+        {
+            LoadLevel();
         }
 
         GUILayout.EndHorizontal();
@@ -79,14 +112,20 @@ public class StandaloneLevelEditor : EditorWindow
     {
         if (terrain != null)
         {
+            if(Level == null)
+                Level = new GameObject("Level");
             GameObject.DestroyImmediate(terrain);
             terrain = GameObject.Instantiate(Terrain, Vector3.zero, Quaternion.identity);
+            terrain.transform.parent = Level.transform;
             terrain.transform.localScale = Vector3.one * scaleFactor;
             collider = terrain.GetComponent<Collider>();
         }
         else
         {
+            if(Level == null)
+                Level = new GameObject("Level");
             terrain = GameObject.Instantiate(Terrain, Vector3.zero, Quaternion.identity);
+            terrain.transform.parent = Level.transform;
             terrain.transform.localScale = Vector3.one * scaleFactor;
             collider = terrain.GetComponent<Collider>();
         }
@@ -136,13 +175,66 @@ public class StandaloneLevelEditor : EditorWindow
                 float dice = Random.Range(0.0f, 1.0f);
                 if (dice < badColChance)
                 {
-                    BadCollectibles.Add(GameObject.Instantiate(BadCollectible, randomSpawnPos, Quaternion.identity));
+                    GameObject temp = GameObject.Instantiate(BadCollectible, randomSpawnPos, Quaternion.identity);
+                    temp.transform.parent = Level.transform;
+                    BadCollectibles.Add(temp);
                 }
                 else
                 {
-                    GoodCollectibles.Add(GameObject.Instantiate(GoodCollectible, randomSpawnPos, Quaternion.identity));
+                    GameObject temp = GameObject.Instantiate(GoodCollectible, randomSpawnPos, Quaternion.identity);
+                    temp.transform.parent = Level.transform;
+                    GoodCollectibles.Add(temp);
                 }
             }
         }
+    }
+
+    public void SaveConfig()
+    {
+        LevelGenData data = new LevelGenData();
+        data.ScaleFactor = scaleFactor;
+        data.BadColllectibleChance = badColChance;
+        data.NumberOfCollectibles = numOfCol;
+        data.Padding = padding;
+
+        string jsonString = JsonUtility.ToJson(data);
+
+        string path = EditorUtility.SaveFilePanelInProject("Save configuration data", "", "json", "Pick a suitable file name for your config data");
+
+        if(!string.IsNullOrEmpty(path))
+        {
+            System.IO.File.WriteAllText(path, jsonString);
+        }
+    }
+
+    public void LoadConfig()
+    {
+        string path = EditorUtility.OpenFilePanel("Load level configuration", Application.dataPath, "json");
+
+        if (!string.IsNullOrEmpty(path))
+        {
+            string jsonString = System.IO.File.ReadAllText(path);
+            LevelGenData data = JsonUtility.FromJson<LevelGenData>(jsonString);
+
+            scaleFactor = data.ScaleFactor;
+            badColChance = data.BadColllectibleChance;
+            numOfCol = data.NumberOfCollectibles;
+            padding = data.Padding;
+        }
+    }
+
+    public void SaveLevel()
+    {
+        string path = EditorUtility.SaveFilePanelInProject("Save level as a prefab", "", "prefab", "Select a valid file name for your prefab");
+        
+        if (!string.IsNullOrEmpty(path))
+        {
+            //GameObject[]
+        }
+    }
+
+    public void LoadLevel()
+    {
+
     }
 }
