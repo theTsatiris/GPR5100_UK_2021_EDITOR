@@ -28,7 +28,7 @@ public class UiHandler : MonoBehaviour
             PLAYER_DATA = new GameData();
             PLAYER_DATA.playerScore = 0;
             PLAYER_DATA.playerName = "New Player";
-            PLAYER_DATA.playerPositsion = new Vector3(0.0f, 1.35f, 0.0f);
+            PLAYER_DATA.playerPosition = new Vector3(0.0f, 1.35f, 0.0f);
 
             PLAYER_DATA.goodCollectibles = new List<Vector3>();
             PLAYER_DATA.badCollectibles = new List<Vector3>();
@@ -36,7 +36,7 @@ public class UiHandler : MonoBehaviour
 
         nameText.text = PLAYER_DATA.playerName;
 
-        Instantiate(Player, PLAYER_DATA.playerPositsion, Quaternion.identity);
+        Instantiate(Player, PLAYER_DATA.playerPosition, Quaternion.identity);
 
         CollectibleSpawner.csInstance.SpawnCollectibles();
     }

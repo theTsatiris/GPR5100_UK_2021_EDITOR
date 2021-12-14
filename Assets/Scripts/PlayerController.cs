@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
             transform.position += transform.right * speed * Time.deltaTime;
         }
 
-        UiHandler.PLAYER_DATA.playerPositsion = transform.position;
+        UiHandler.PLAYER_DATA.playerPosition = transform.position;
     }
 
     void OnTriggerEnter(Collider collider)

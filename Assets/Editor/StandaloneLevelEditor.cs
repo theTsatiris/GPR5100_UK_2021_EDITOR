@@ -5,9 +5,9 @@ using UnityEditor;
 
 public class StandaloneLevelEditor : EditorWindow
 {
-    public static GameObject Terrain;
-    public static GameObject GoodCollectible;
-    public static GameObject BadCollectible;
+    public GameObject Terrain;
+    public GameObject GoodCollectible;
+    public GameObject BadCollectible;
 
     public float scaleFactor = 1.0f;
     public float badColChance = 0.0f;

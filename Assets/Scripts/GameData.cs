@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameData
 {
     public string playerName;
-    public Vector3 playerPositsion;
+    public Vector3 playerPosition;
     public int playerScore;
 
     public List<Vector3> goodCollectibles;
