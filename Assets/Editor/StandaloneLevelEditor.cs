@@ -229,12 +229,22 @@ public class StandaloneLevelEditor : EditorWindow
         
         if (!string.IsNullOrEmpty(path))
         {
-            //GameObject[]
+            //If we dont want to connect the new prefab with the level gameobject
+            //PrefabUtility.SaveAsPrefabAsset(Level, path);
+
+            //If we want to connect the new prefab with the level gameobject
+            PrefabUtility.SaveAsPrefabAssetAndConnect(Level, path, InteractionMode.UserAction);
         }
     }
 
     public void LoadLevel()
     {
-
+        /*string path = EditorUtility.OpenFilePanel("Load level from prefab", Application.dataPath, "prefab");
+        Debug.Log(path);
+        if (!string.IsNullOrEmpty(path))
+        {*/
+            GameObject levelPrefab = Resources.Load<GameObject>(Application.dataPath + "/Prefabs/LevelTest.prefab");
+            Level = GameObject.Instantiate(levelPrefab, Vector3.zero, Quaternion.identity);
+        /*}*/
     }
 }
