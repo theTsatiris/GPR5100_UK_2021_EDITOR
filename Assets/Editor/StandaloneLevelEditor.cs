@@ -5,13 +5,9 @@ using UnityEditor;
 
 public class StandaloneLevelEditor : EditorWindow
 {
-    public Object terrainPrefabObj;
-    public Object collectiblePrefabObj;
-    public Object badCollectiblePrefabObj;
-
-    public GameObject Terrain;
-    public GameObject GoodCollectible;
-    public GameObject BadCollectible;
+    public static GameObject Terrain;
+    public static GameObject GoodCollectible;
+    public static GameObject BadCollectible;
 
     public float scaleFactor = 1.0f;
     public float badColChance = 0.0f;
@@ -32,9 +28,9 @@ public class StandaloneLevelEditor : EditorWindow
 
     void OnGUI()
     {
-        GameObject terrainPrefab = EditorGUILayout.ObjectField("Terrain", terrainPrefabObj, typeof(GameObject), false) as GameObject;
-        GameObject collectiblePrefab = EditorGUILayout.ObjectField("Collectible", collectiblePrefabObj, typeof(GameObject), false) as GameObject;
-        GameObject badCollectiblePrefab = EditorGUILayout.ObjectField("Bad Collectible", badCollectiblePrefabObj, typeof(GameObject), false) as GameObject;
+        Terrain = EditorGUILayout.ObjectField("Terrain", Terrain, typeof(GameObject), true) as GameObject;
+        GoodCollectible = EditorGUILayout.ObjectField("Collectible", GoodCollectible, typeof(GameObject), true) as GameObject;
+        BadCollectible = EditorGUILayout.ObjectField("Bad Collectible", BadCollectible, typeof(GameObject), true) as GameObject;
 
         scaleFactor = EditorGUILayout.Slider("Terrain Size (%)", scaleFactor * 100, 10.0f, 200.0f) / 100.0f;
 
@@ -57,9 +53,6 @@ public class StandaloneLevelEditor : EditorWindow
         content.tooltip = "Generates a new terrain from the prefab. If terrain exists, it destroys it.";
         if (GUILayout.Button(content))
         {
-            Terrain = terrainPrefab;
-            GoodCollectible = collectiblePrefab;
-            BadCollectible = badCollectiblePrefab;
             CreateTerrain();
         }
 
