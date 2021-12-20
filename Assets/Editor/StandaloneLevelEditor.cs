@@ -239,12 +239,12 @@ public class StandaloneLevelEditor : EditorWindow
 
     public void LoadLevel()
     {
-        /*string path = EditorUtility.OpenFilePanel("Load level from prefab", Application.dataPath, "prefab");
+        string path = EditorUtility.OpenFilePanel("Load level from prefab", Application.dataPath, "prefab");
         Debug.Log(path);
         if (!string.IsNullOrEmpty(path))
-        {*/
-            GameObject levelPrefab = Resources.Load<GameObject>(Application.dataPath + "/Prefabs/LevelTest.prefab");
+        {
+            GameObject levelPrefab = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
             Level = GameObject.Instantiate(levelPrefab, Vector3.zero, Quaternion.identity);
-        /*}*/
+        }
     }
 }
